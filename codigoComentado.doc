@@ -1,0 +1,45 @@
+int ldrPin = A0; // define o pino AO como "ldrPin"
+int ldrVal; // cria uma variavel para definir valor ao pino ldr
+int intensidadeLuz; // cria uma variavel para definir o valor da instensidade luminosa
+int redPin = 13; // define o pino 13 como "redPin"
+int yellowPin = 8; // define o pino 8 como "yellowPin"
+int greenPin = 4; // define o pino 4 como "greenPin"
+int buzzer = 2; // define o pino 2 como "buzzer"
+
+void setup() { // todos os codigos dentro do "void setup() ocorrem apenas uma vez
+  Serial.begin(9600); // inicia a porta serial e configura a taxa de bits para 9600
+  pinMode(redPin, OUTPUT); // configura o redPin como saída
+  pinMode(yellowPin, OUTPUT); // configura o yellowPin como saída
+  pinMode(greenPin, OUTPUT); // configura o greenPin como saída
+  pinMode (buzzer, OUTPUT); // configura o buzzer como saída
+}
+
+void loop() { // todos os codigos dentro do "void loop()" ocorrem repetidamente
+  ldrVal = analogRead(ldrPin); // lê o valor do pino ldr
+  intensidadeLuz = map(ldrVal, 0, 1024, 0, 100); // remapeia os limites de um intervalo para que fiquem em uma escala de 0% - 100%
+  Serial.println("luminosidade : "); // mostra a palavra "luminosidade: " no terminal
+  Serial.println(intensidadeLuz); // mostra o valor da intensidade luminosa recebida pelo ldr
+  delay(300);// espera de 0.3 segundos
+  
+  if (intensidadeLuz < 50) {
+    digitalWrite(greenPin, HIGH);// configura o greenPin como aceso
+    digitalWrite(yellowPin, LOW);// configura o yellowPin como desligado
+    digitalWrite(redPin, LOW);// configura o redPin como desligado
+    delay(300);// espera de 0.3 segundos
+  }
+  else if (intensidadeLuz < 75) {
+    digitalWrite(yellowPin, HIGH);// configura o yellowPin como aceso
+    digitalWrite(greenPin, LOW);// configura o greenPin como desligado
+    digitalWrite(redPin, LOW);// configura o redPin como desligado
+    delay(300);// espera de 0.3 segundos
+  }
+  else if (intensidadeLuz < 100){
+    digitalWrite(redPin, HIGH);// configura o redPin como aceso
+    digitalWrite(yellowPin, LOW);// configura o yellowPin como desligado
+    digitalWrite(greenPin, LOW);// configura o greenPin como desligado
+    tone(buzzer,200,3000); // configura o buzzer, a frequência sonora e a duração do som
+    delay(3000);// espera de 3 segundos
+    noTone(buzzer);// desliga o buzzer
+    delay(1000);// espera de 1 segundo
+  }
+}
